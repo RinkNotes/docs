@@ -1,0 +1,90 @@
+{
+  "$schema": "https://mintlify.com/docs.json",
+  "theme": "mint",
+  "name": "RinkNotes",
+  "description": "How to use Video by RinkNotes and Lineups: record and stream hockey games, make highlights and goalie reels, and set your lines with voice notes.",
+  "colors": {
+    "primary": "#1a7f37",
+    "light": "#3fb950",
+    "dark": "#1a7f37"
+  },
+  "appearance": {
+    "default": "dark"
+  },
+  "background": {
+    "color": {
+      "light": "#ffffff",
+      "dark": "#0d1117"
+    }
+  },
+  "fonts": {
+    "family": "Inter"
+  },
+  "logo": {
+    "light": "/logo/light.svg",
+    "dark": "/logo/dark.svg",
+    "href": "https://rinknotes.app"
+  },
+  "favicon": "/favicon.svg",
+  "navbar": {
+    "links": [
+      { "label": "rinknotes.app", "href": "https://rinknotes.app" },
+      { "label": "Support", "href": "https://rinknotes.app/lineups/support/" }
+    ],
+    "primary": {
+      "type": "button",
+      "label": "Get the apps",
+      "href": "/get-started/get-the-apps"
+    }
+  },
+  "navigation": {
+    "groups": [
+      {
+        "group": "Start here",
+        "pages": [
+          "index",
+          "start-here/free-and-team-plan"
+        ]
+      },
+      {
+        "group": "Get started free",
+        "pages": [
+          "get-started/get-the-apps",
+          "get-started/record-your-first-game",
+          "get-started/highlights-and-goalie-reel",
+          "get-started/save-a-video-file",
+          "get-started/share-to-social",
+          "get-started/stream-to-youtube",
+          "get-started/stream-to-facebook",
+          "get-started/stream-to-vimeo",
+          "get-started/stream-to-any-address",
+          "get-started/lineups-first-lineup"
+        ]
+      }
+    ]
+  },
+  "footer": {
+    "links": [
+      {
+        "header": "RinkNotes, Lineups and Video are products of Wispera AI Inc.",
+        "items": [
+          { "label": "hello@wispera.ai", "href": "mailto:hello@wispera.ai" },
+          { "label": "rinknotes.app", "href": "https://rinknotes.app" }
+        ]
+      },
+      {
+        "header": "On rinknotes.app",
+        "items": [
+          { "label": "Privacy", "href": "https://rinknotes.app/lineups/privacy/" },
+          { "label": "Terms", "href": "https://rinknotes.app/lineups/terms/" },
+          { "label": "Support", "href": "https://rinknotes.app/lineups/support/" }
+        ]
+      }
+    ]
+  },
+  "integrations": {
+    "telemetry": {
+      "enabled": false
+    }
+  }
+}
