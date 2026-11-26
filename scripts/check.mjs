@@ -17,7 +17,7 @@
 //             TestFlight or another site (YouTube, Facebook, Vimeo) listed below
 //   COMING    something not built is named without the word "Coming" beside it
 //   SITE      a script or remote picture, a link to another site, a TestFlight link, or an email other
-//             than hello@wispera.ai
+//             than rinknotes@wispera.ai
 //   DRAW      a drawing (<S2_10 />) that isn't imported, an import of a drawing that doesn't exist or
 //             isn't used, or a word ringed as "tap here" in a drawing that isn't in RN Video's source
 //   NAV       a page in docs.json has no file, or a page has no place in docs.json
@@ -200,7 +200,7 @@ for (const { rel, src } of pages) {
     if (!ALLOWED_HOSTS.has(host)) say("SITE", rel, `a link to another site: ${u}`);
   }
   for (const e of src.match(/[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[a-z]{2,}/g) ?? []) {
-    if (e !== "hello@wispera.ai") say("SITE", rel, `an email other than hello@wispera.ai: ${e}`);
+    if (e !== "rinknotes@wispera.ai") say("SITE", rel, `an email other than rinknotes@wispera.ai: ${e}`);
   }
 
   // REAL

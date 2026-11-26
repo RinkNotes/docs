@@ -10,7 +10,7 @@
 #             isn't HEAD:docs-site
 #   VIDEO     a video file (by name or by its first bytes), or a path into the footage folder
 #   SECRET    the shape of a key, token or private key
-#   EMAIL     an email address other than hello@wispera.ai (the one exception: Anthropic's noreply
+#   EMAIL     an email address other than rinknotes@wispera.ai (the one exception: Anthropic's noreply
 #             address in a Co-Authored-By trailer, in commit messages only)
 #   TESTFLIGHT a link to TestFlight's join pages (they live only in the tester guides on rinknotes.app)
 #   REAL      a name on the private list of real names: RINKNOTES_REAL_NAMES, by default
@@ -61,7 +61,7 @@ scan_text() { # $1 where, stdin: text
   grep -Eiq "$tf_re" <<<"$text" && fail TESTFLIGHT "$where"
   local e
   while read -r e; do
-    [[ -z "$e" || "$e" == "hello@wispera.ai" ]] && continue
+    [[ -z "$e" || "$e" == "rinknotes@wispera.ai" ]] && continue
     fail EMAIL "$where: $e"
   done < <(grep -Eo "$email_re" <<<"$text" | sort -u)
   local n
@@ -77,7 +77,7 @@ for c in $commits; do
   count=$((count + 1))
   short=${c:0:9}
   for who in "$(git log -1 --format='%ae' "$c")" "$(git log -1 --format='%ce' "$c")"; do
-    [[ "$who" == "hello@wispera.ai" ]] || fail EMAIL "commit $short: author or committer $who"
+    [[ "$who" == "rinknotes@wispera.ai" ]] || fail EMAIL "commit $short: author or committer $who"
   done
   git log -1 --format='%an%n%cn%n%B' "$c" | grep -v '^Co-Authored-By: .*<noreply@anthropic\.com>$' | scan_text "commit $short's message"
   while read -r mode type sha path; do
