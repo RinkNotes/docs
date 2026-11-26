@@ -82,7 +82,7 @@ const VIDEO = {
   "Export the game reel": "Export the ", "Export the goalie reel": "Export the ",
   "Save to Photos": "Save to Photos", "Share…": "Share…", "Export the highlight pack…": "Export the highlight pack…",
   "Export": "Export", "Export game reel…": "Export ", "Choose": "Choose", "Show in Finder": "Show in Finder",
-  "1080p copy…": "1080p copy…",
+  "1080p copy…": "1080p copy…", "P2 starts here (2)": "starts here (\\(",
   "Delete from this iPhone…": "Delete from this \\(", "Delete from this iPad…": "Delete from this \\(",
   "Where it goes": "Where it goes", "YouTube": "YouTube", "Facebook": "Facebook", "Page": "Page", "Group": "Group",
   "Another stream address": "Another stream address", "Go live": "Go live",
@@ -283,7 +283,10 @@ async function snippet(path) {
 }
 const DRAWN_OK = new Set([...SYSTEM, ...THIRD]); // a ring may sit on iOS's own buttons too
 // Ringed words the source builds from parts (value: the text that must be in RN Video's source).
-const DRAWN_NEEDLE = { "Delete 15 clips": "Delete \\(", "Next drill: Shuffle": "Next drill: \\(" };
+const DRAWN_NEEDLE = {
+  "Delete 15 clips": "Delete \\(", "Next drill: Shuffle": "Next drill: \\(",
+  "P2 starts here (2)": "starts here (\\(", "Keep as a save (K)": "\"Keep as a save\", \"K\"",
+};
 const tapChecked = new Set();
 for (const { rel, src } of pages) {
   const [, body] = frontmatter(src);

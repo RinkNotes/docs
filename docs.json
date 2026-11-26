@@ -113,6 +113,35 @@
           },
           "video/send-to-your-mac"
         ]
+      },
+      {
+        "group": "Video on the Mac",
+        "pages": [
+          "mac/find-your-way-round",
+          {
+            "group": "Bring video in",
+            "pages": [
+              "mac/bring-a-game-in",
+              "mac/import-other-video"
+            ]
+          },
+          {
+            "group": "Tag the game",
+            "pages": [
+              "mac/tag-with-keys",
+              "mac/find-saves-you-missed",
+              "mac/ask-and-look-closer"
+            ]
+          },
+          {
+            "group": "Make the video",
+            "pages": [
+              "mac/pick-the-reel",
+              "mac/export"
+            ]
+          },
+          "mac/free-up-space"
+        ]
       }
     ]
   },
