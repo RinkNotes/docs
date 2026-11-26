@@ -142,6 +142,37 @@
           },
           "mac/free-up-space"
         ]
+      },
+      {
+        "group": "Lineups",
+        "pages": [
+          "lineups/where-things-are",
+          "lineups/turn-your-phone",
+          {
+            "group": "Before the game",
+            "pages": [
+              "lineups/set-your-lines",
+              "lineups/associate-players",
+              "lineups/send-your-team"
+            ]
+          },
+          {
+            "group": "During the game",
+            "pages": [
+              "lineups/during-the-game",
+              "lineups/airpods-notes",
+              "lineups/siri-and-shortcuts"
+            ]
+          },
+          {
+            "group": "After the game",
+            "pages": [
+              "lineups/scores-and-scorers",
+              "lineups/topics",
+              "lineups/player-summaries"
+            ]
+          }
+        ]
       }
     ]
   },

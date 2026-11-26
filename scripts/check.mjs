@@ -93,11 +93,12 @@ const LINEUPS = {
   "Add 18 players": "Add \\(", "Say it": "Say it", "Home": "\"Home\"", "Away": "\"Away\"", "Set the lines": "Set the lines",
   "Fill by position": "Fill by position", "Start game ›": "Start game ›", "Start later": "Start later", "Got it": "Got it",
   "Save note": "Save note", "Type instead": "Type instead", "Go to my teams": "Go to my teams",
+  "Update my Wolves U13 A": "Update my \\(",
 };
 // Words of iOS, macOS, the App Store and TestFlight (not the apps'), allowed in bold.
 const SYSTEM = new Set([
   "Get", "Accept", "Install", "Open", "Allow", "View in TestFlight", "Automatic Updates", "Do Not Disturb",
-  "Paste", "Save to Files",
+  "Paste", "Save to Files", "Choose a Shortcut", "Double Tap", "Triple Tap", "Portrait Orientation Lock",
 ]);
 // Words on other sites, as those sites show them, allowed in bold. They can't be checked here.
 const THIRD = new Set([
@@ -275,7 +276,8 @@ for (const [label, rel] of boldSeen) {
   if (!needles.some(([n, text]) => text.includes(n))) say("BUTTON", rel, `"${label}" isn't in ${needles.map((x) => x[2]).join(" or ")}'s source (or list it, with its needle)`);
 }
 
-// DRAW: drawings come from snippets/video/<section>.jsx (made by drawings.mjs).
+// DRAW: drawings come from snippets/video/<section>.jsx (made by drawings.mjs) and snippets/lineups/<section>.jsx
+// (made by lineups-drawings.mjs). A ringed word must be in the source of the app the drawing is of.
 const snippetCache = new Map();
 async function snippet(path) {
   if (!snippetCache.has(path)) snippetCache.set(path, (await exists(`${root}${path}`)) ? await Deno.readTextFile(`${root}${path}`) : null);
@@ -304,14 +306,17 @@ for (const { rel, src } of pages) {
   for (const [n, f] of imported) {
     if (!used.has(n)) { say("DRAW", rel, `${n} is imported and not shown`); continue; }
     const key = `${f}#${n}`;
-    if (tapChecked.has(key) || videoText === null) continue;
+    const isLineups = f.startsWith("/snippets/lineups/");
+    const appText = isLineups ? lineupsText : videoText;
+    if (tapChecked.has(key) || appText === null) continue;
     tapChecked.add(key);
     const file = await snippet(f);
     const jsx = file.slice(file.indexOf(`export const ${n} = `)).split(/\n\);\n/)[0];
     for (const t of jsx.matchAll(/className="[^"]*\btap\b[^"]*"[^>]*>([^<{]+)</g)) {
       const word = t[1].replace(/[✓☑›‹]/g, "").replace(/^\+\s*/, "").trim();
       if (!word || DRAWN_OK.has(word) || /^[−+✎⋯<>#\d\s.:%·–-]+$/.test(word)) continue;
-      if (!videoText.includes(VIDEO[word] ?? DRAWN_NEEDLE[word] ?? word)) say("DRAW", rel, `${n} rings "${word}", which isn't in RN Video's source`);
+      const needle = (isLineups ? LINEUPS[word] : VIDEO[word]) ?? DRAWN_NEEDLE[word] ?? word;
+      if (!appText.includes(needle)) say("DRAW", rel, `${n} rings "${word}", which isn't in ${isLineups ? "Lineups" : "RN Video"}'s source`);
     }
   }
 }
