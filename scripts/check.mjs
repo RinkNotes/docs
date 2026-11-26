@@ -99,6 +99,7 @@ const LINEUPS = {
 const SYSTEM = new Set([
   "Get", "Accept", "Install", "Open", "Allow", "View in TestFlight", "Automatic Updates", "Do Not Disturb",
   "Paste", "Save to Files", "Choose a Shortcut", "Double Tap", "Triple Tap", "Portrait Orientation Lock",
+  "TestFlight", "Share", "Share Beta Feedback", "Submit", "Send Beta Feedback",
 ]);
 // Words on other sites, as those sites show them, allowed in bold. They can't be checked here.
 const THIRD = new Set([

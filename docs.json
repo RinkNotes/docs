@@ -173,6 +173,14 @@
             ]
           }
         ]
+      },
+      {
+        "group": "Help",
+        "pages": [
+          "help/where-things-are",
+          "help/good-to-know",
+          "help/contact"
+        ]
       }
     ]
   },
