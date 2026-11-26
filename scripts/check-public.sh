@@ -71,7 +71,13 @@ scan_text() { # $1 where, stdin: text
   done < "$names"
 }
 
-commits=$(git rev-list "$split")
+# Commits already on the public repo (the docs remote's main) are public already, so only the ones a push would
+# add are checked. Without that ref, every commit is checked (D674).
+if git rev-parse -q --verify refs/remotes/docs/main >/dev/null; then
+  commits=$(git rev-list "$split" --not refs/remotes/docs/main)
+else
+  commits=$(git rev-list "$split")
+fi
 count=0
 for c in $commits; do
   count=$((count + 1))
