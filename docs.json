@@ -28,8 +28,14 @@
   "favicon": "/favicon.svg",
   "navbar": {
     "links": [
-      { "label": "rinknotes.app", "href": "https://rinknotes.app" },
-      { "label": "Support", "href": "https://rinknotes.app/lineups/support/" }
+      {
+        "label": "rinknotes.app",
+        "href": "https://rinknotes.app"
+      },
+      {
+        "label": "Support",
+        "href": "https://rinknotes.app/lineups/support/"
+      }
     ],
     "primary": {
       "type": "button",
@@ -60,6 +66,53 @@
           "get-started/stream-to-any-address",
           "get-started/lineups-first-lineup"
         ]
+      },
+      {
+        "group": "Video on iPhone and iPad",
+        "pages": [
+          "video/first-look",
+          {
+            "group": "Record a game",
+            "pages": [
+              "video/hold-lens-and-focus",
+              "video/mark-moments-and-goals",
+              "video/periods-pauses-and-the-end",
+              "video/recording-trouble"
+            ]
+          },
+          "video/during-a-stream",
+          {
+            "group": "Moments",
+            "pages": [
+              "video/record-moments",
+              "video/bring-in-videos"
+            ]
+          },
+          {
+            "group": "Skills",
+            "pages": [
+              "video/unlock-skills",
+              "video/record-a-goalie-lesson"
+            ]
+          },
+          "video/gimbal",
+          {
+            "group": "Make a reel",
+            "pages": [
+              "video/tag-your-moments",
+              "video/player-moments",
+              "video/find-saves-you-missed"
+            ]
+          },
+          {
+            "group": "Ask and look closer",
+            "pages": [
+              "video/ask",
+              "video/look-closer"
+            ]
+          },
+          "video/send-to-your-mac"
+        ]
       }
     ]
   },
@@ -68,16 +121,31 @@
       {
         "header": "RinkNotes, Lineups and Video are products of Wispera AI Inc.",
         "items": [
-          { "label": "hello@wispera.ai", "href": "mailto:hello@wispera.ai" },
-          { "label": "rinknotes.app", "href": "https://rinknotes.app" }
+          {
+            "label": "hello@wispera.ai",
+            "href": "mailto:hello@wispera.ai"
+          },
+          {
+            "label": "rinknotes.app",
+            "href": "https://rinknotes.app"
+          }
         ]
       },
       {
         "header": "On rinknotes.app",
         "items": [
-          { "label": "Privacy", "href": "https://rinknotes.app/lineups/privacy/" },
-          { "label": "Terms", "href": "https://rinknotes.app/lineups/terms/" },
-          { "label": "Support", "href": "https://rinknotes.app/lineups/support/" }
+          {
+            "label": "Privacy",
+            "href": "https://rinknotes.app/lineups/privacy/"
+          },
+          {
+            "label": "Terms",
+            "href": "https://rinknotes.app/lineups/terms/"
+          },
+          {
+            "label": "Support",
+            "href": "https://rinknotes.app/lineups/support/"
+          }
         ]
       }
     ]

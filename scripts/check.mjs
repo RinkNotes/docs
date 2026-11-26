@@ -12,11 +12,14 @@
 //   LENGTH    a sentence has more than 20 words; or more than 15 % of sentences have more than 12
 //   GRADE     the docs' reading level (Flesch-Kincaid) is above grade 5
 //   JARGON    a banned word appears in the docs' own words (bold words are the apps')
-//   BUTTON    a bold word isn't a known on-screen word: the apps' own (found in their sources as written),
-//             or a word of iOS, macOS, TestFlight or another site (YouTube, Facebook, Vimeo) listed below
+//   BUTTON    a bold word isn't a known on-screen word: the apps' own (found in their sources as written,
+//             or by the needle listed below where the source builds it), or a word of iOS, macOS,
+//             TestFlight or another site (YouTube, Facebook, Vimeo) listed below
 //   COMING    something not built is named without the word "Coming" beside it
 //   SITE      a script or remote picture, a link to another site, a TestFlight link, or an email other
 //             than hello@wispera.ai
+//   DRAW      a drawing (<S2_10 />) that isn't imported, an import of a drawing that doesn't exist or
+//             isn't used, or a word ringed as "tap here" in a drawing that isn't in RN Video's source
 //   NAV       a page in docs.json has no file, or a page has no place in docs.json
 //   REAL      a real child's, team's or rink's name from the private list (never kept in this folder)
 //
@@ -80,6 +83,7 @@ const VIDEO = {
   "Save to Photos": "Save to Photos", "Share…": "Share…", "Export the highlight pack…": "Export the highlight pack…",
   "Export": "Export", "Export game reel…": "Export ", "Choose": "Choose", "Show in Finder": "Show in Finder",
   "1080p copy…": "1080p copy…",
+  "Delete from this iPhone…": "Delete from this \\(", "Delete from this iPad…": "Delete from this \\(",
   "Where it goes": "Where it goes", "YouTube": "YouTube", "Facebook": "Facebook", "Page": "Page", "Group": "Group",
   "Another stream address": "Another stream address", "Go live": "Go live",
 };
@@ -180,7 +184,7 @@ for (const { rel, src } of pages) {
   else if (fm.description.length > 160) say("FRONT", rel, `description of ${fm.description.length} characters (at most 160)`);
 
   // ANSWER: the first block is two lines of plain text.
-  const blocks = body.split(/\n\s*\n/).map((b) => b.trim()).filter(Boolean);
+  const blocks = body.split(/\n\s*\n/).map((b) => b.trim()).filter((b) => b && !/^import /.test(b));
   const first = blocks[0] ?? "";
   if (/^(#|<|-|\||import )/.test(first) || first.split("\n").length !== 2) {
     say("ANSWER", rel, "doesn't open with a two-line answer");
@@ -218,6 +222,7 @@ for (const { rel, src } of pages) {
   for (const raw of body.split("\n")) {
     let line = raw.trim();
     if (!line || line.startsWith("|---") || /^\| ?-/.test(line)) continue;
+    if (/^import /.test(line) || /^<[A-Z]\w* \/>$/.test(line)) continue;
     if (/^<\/?(Steps|CardGroup|Note|Tip|Warning|Info)\b[^>]*>$/.test(line) || /^<\/(Step|Card)>$/.test(line)) continue;
     const step = line.match(/^<Step\s+title="([^"]*)"/);
     if (step) { units.push({ head: true, text: step[1] }); continue; }
@@ -252,7 +257,6 @@ for (const { rel, src } of pages) {
       const label = b[1].trim();
       if (label.endsWith(":")) continue; // a label for a line, not a button
       if (SYSTEM.has(label) || THIRD.has(label)) continue;
-      if (!(label in VIDEO) && !(label in LINEUPS)) { say("BUTTON", rel, `"${label}" isn't a known on-screen word (add it, with its source)`); continue; }
       if (!boldSeen.has(label)) boldSeen.set(label, rel);
     }
   }
@@ -266,8 +270,47 @@ for (const [label, rel] of boldSeen) {
   const needles = [];
   if (label in VIDEO) needles.push([VIDEO[label], videoText, "RN Video"]);
   if (label in LINEUPS) needles.push([LINEUPS[label], lineupsText, "Lineups"]);
+  if (!needles.length) needles.push([label, videoText, "RN Video"], [label, lineupsText, "Lineups"]);
   if (needles.some(([, text]) => text === null)) { unchecked.push(label); continue; }
-  if (!needles.some(([n, text]) => text.includes(n))) say("BUTTON", rel, `"${label}" isn't in ${needles.map((x) => x[2]).join(" or ")}'s source`);
+  if (!needles.some(([n, text]) => text.includes(n))) say("BUTTON", rel, `"${label}" isn't in ${needles.map((x) => x[2]).join(" or ")}'s source (or list it, with its needle)`);
+}
+
+// DRAW: drawings come from snippets/video/<section>.jsx (made by drawings.mjs).
+const snippetCache = new Map();
+async function snippet(path) {
+  if (!snippetCache.has(path)) snippetCache.set(path, (await exists(`${root}${path}`)) ? await Deno.readTextFile(`${root}${path}`) : null);
+  return snippetCache.get(path);
+}
+const DRAWN_OK = new Set([...SYSTEM, ...THIRD]); // a ring may sit on iOS's own buttons too
+// Ringed words the source builds from parts (value: the text that must be in RN Video's source).
+const DRAWN_NEEDLE = { "Delete 15 clips": "Delete \\(", "Next drill: Shuffle": "Next drill: \\(" };
+const tapChecked = new Set();
+for (const { rel, src } of pages) {
+  const [, body] = frontmatter(src);
+  const imported = new Map(); // name -> file
+  for (const m of body.matchAll(/^import \{([^}]*)\} from "([^"]+)";?$/gm)) {
+    const file = await snippet(m[2]);
+    if (file === null) { say("DRAW", rel, `imports from ${m[2]}, which isn't there`); continue; }
+    for (const n of m[1].split(",").map((x) => x.trim()).filter(Boolean)) {
+      if (!new RegExp(`^export const ${n} = `, "m").test(file)) say("DRAW", rel, `${m[2]} has no drawing ${n}`);
+      imported.set(n, m[2]);
+    }
+  }
+  const used = new Set([...body.matchAll(/<([A-Z]\w*) \/>/g)].map((m) => m[1]));
+  for (const n of used) if (!imported.has(n)) say("DRAW", rel, `<${n} /> isn't imported`);
+  for (const [n, f] of imported) {
+    if (!used.has(n)) { say("DRAW", rel, `${n} is imported and not shown`); continue; }
+    const key = `${f}#${n}`;
+    if (tapChecked.has(key) || videoText === null) continue;
+    tapChecked.add(key);
+    const file = await snippet(f);
+    const jsx = file.slice(file.indexOf(`export const ${n} = `)).split(/\n\);\n/)[0];
+    for (const t of jsx.matchAll(/className="[^"]*\btap\b[^"]*"[^>]*>([^<{]+)</g)) {
+      const word = t[1].replace(/[✓☑›‹]/g, "").replace(/^\+\s*/, "").trim();
+      if (!word || DRAWN_OK.has(word) || /^[−+✎⋯<>#\d\s.:%·–-]+$/.test(word)) continue;
+      if (!videoText.includes(VIDEO[word] ?? DRAWN_NEEDLE[word] ?? word)) say("DRAW", rel, `${n} rings "${word}", which isn't in RN Video's source`);
+    }
+  }
 }
 
 // NAV
