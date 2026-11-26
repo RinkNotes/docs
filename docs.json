@@ -29,6 +29,10 @@
   "navbar": {
     "links": [
       {
+        "label": "Request a team page",
+        "href": "https://rinknotes.app/team-page/request/"
+      },
+      {
         "label": "rinknotes.app",
         "href": "https://rinknotes.app"
       },
@@ -49,11 +53,12 @@
         "group": "Start here",
         "pages": [
           "index",
-          "start-here/free-and-team-plan"
+          "start-here/free-and-team-plan",
+          "start-here/hockey-ai"
         ]
       },
       {
-        "group": "Get started free",
+        "group": "Get started",
         "pages": [
           "get-started/get-the-apps",
           "get-started/record-your-first-game",
@@ -178,7 +183,10 @@
         "group": "For teams",
         "pages": [
           "for-teams/request-a-team-page",
-          "for-teams/your-free-game"
+          "for-teams/your-free-game",
+          "for-teams/sign-in",
+          "for-teams/publish",
+          "for-teams/go-live-on-your-team-page"
         ]
       },
       {

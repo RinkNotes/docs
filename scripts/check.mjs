@@ -247,7 +247,8 @@ for (const { rel, src } of pages) {
     }
     if (u.head) continue;
     // JARGON (outside bold)
-    const t = " " + noBold(u.raw).toLowerCase().replace(/\s+/g, " ") + " ";
+    // The site's own phrase "large language model(s)" is allowed (D674); "model" alone is still banned.
+    const t = (" " + noBold(u.raw).toLowerCase().replace(/\s+/g, " ") + " ").replace(/\blarge language models?\b/g, "large language");
     for (const j of JARGON) {
       const re = new RegExp(`(^|[^a-z0-9-])${j.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}($|[^a-z0-9-])`);
       if (re.test(t)) say("JARGON", rel, `"${j}" in: "${u.text.slice(0, 90)}"`);
